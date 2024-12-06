@@ -27,4 +27,4 @@ jobs:
         docker pull stijn0vp/linktree:latest
         docker stop linktree || true
         docker rm linktree || true
-        docker run -d -p 80:80 --name linktree stijn0vp/linktree:latest
+        docker run -d -p 8081:80 --name linktree stijn0vp/linktree:latest
