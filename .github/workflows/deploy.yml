@@ -16,8 +16,8 @@ jobs:
     - name: Log in to Docker Hub
       run: echo "${{ secrets.docker_password }}" | docker login -u "${{ secrets.docker_username }}" --password-stdin
 
-    - name: Build the Docker image
-      run: echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S docker build -t stijn0vp/linktree:latest .
+    - name: Push Docker image to Docker Hub
+      run: echo "${{ secrets.sudo_password }}" | sudo -S docker push stijn0vp/linktree:latest
 
     - name: Push Docker image to Docker Hub
       run: sudo docker push stijn0vp/linktree:latest
