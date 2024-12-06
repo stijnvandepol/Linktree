@@ -24,7 +24,7 @@ jobs:
 
     - name: Deploy container
       run: |
-        sudo docker pull stijn0vp/linktree:latest
-        sudo docker stop linktree || true
-        sudo docker rm linktree || true
-        sudo docker run -d -p 80:80 --name linktree stijn0vp/linktree:latest
+        docker pull stijn0vp/linktree:latest
+        docker stop linktree || true
+        docker rm linktree || true
+        docker run -d -p 80:80 --name linktree stijn0vp/linktree:latest
