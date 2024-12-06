@@ -14,10 +14,10 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Log in to Docker Hub
-      run: echo "${{ secrets.docker_password }}" | docker login -u "${{ secrets.docker_username }}" --password-stdin
+      run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
     - name: Push Docker image to Docker Hub
-      run: echo "${{ secrets.sudo_password }}" | sudo -S docker push stijn0vp/linktree:latest
+      run: docker push stijn0vp/linktree:latest
 
     - name: Push Docker image to Docker Hub
       run: sudo docker push stijn0vp/linktree:latest
