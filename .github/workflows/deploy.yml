@@ -29,8 +29,13 @@ jobs:
     steps:
     - name: Deploy container
       run: |
-        docker ps -q -f name=linktree && docker stop linktree || true
-        docker ps -a -q -f name=linktree && docker rm linktree || true
-        docker images -q stijn0vp/linktree:latest && docker image rm stijn0vp/linktree:latest || true
+        docker ps -q -f name=linktree && docker stop linktree || echo "Container linktree is not running"
+
+        docker ps -a -q -f name=linktree && docker rm linktree || echo "Container linktree does not exist"
+
+        docker images -q stijn0vp/linktree:latest && docker image rm stijn0vp/linktree:latest || echo "Image stijn0vp/linktree:latest does not exist locally"
+
         docker pull stijn0vp/linktree:latest
+
         docker run -d -p 8081:80 --name linktree stijn0vp/linktree:latest
+        docker ps -a
