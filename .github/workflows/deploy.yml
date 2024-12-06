@@ -1,7 +1,28 @@
-name: Test Runner
-on: push
+name: Build and Deploy
+
+on:
+  push:
+    branches:
+      - main
+
 jobs:
-  test:
-    runs-on: self-hosted
+  build:
+    runs-on: [self-hosted]
+
     steps:
-      - run: echo "Runner werkt!"
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Log in to Docker Hub
+      run: echo "${{ secrets.docker_password }}" | docker login -u "${{ secrets.docker_username }}" --password-stdin
+
+    - name: Build the Docker image
+      run: docker build -t stijn0vp/linktree:latest .
+
+    - name: Push Docker image to Docker Hub
+      run: docker push stijn0vp/linktree:latest
+
+    - name: Deploy container
+      run: |
+        docker pull stijn0vp/website:latest
+        docker run -d -p 80:80 --name linktree stijn0vp/website:latest
