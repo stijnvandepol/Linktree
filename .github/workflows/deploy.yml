@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    runs-on: [self-hosted]
+    runs-on: ubuntu-latest  
 
     steps:
     - name: Checkout repository
@@ -22,6 +22,11 @@ jobs:
     - name: Push Docker image to Docker Hub
       run: docker push stijn0vp/linktree:latest
 
+  deploy:
+    runs-on: [self-hosted]
+    needs: build 
+
+    steps:
     - name: Deploy container
       run: |
         docker pull stijn0vp/linktree:latest
