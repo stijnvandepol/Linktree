@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    runs-on: [self-hosted, pveserver]
+    runs-on: [self-hosted, srv-doc-01]
 
     steps:
     - name: Checkout repository
