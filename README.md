@@ -1,6 +1,6 @@
 # Linktree Project
 
-This project is a simple Linktree clone built with HTML and CSS. It is hosted in a Docker container and served to the public through Cloudflared at [stijnvandepol.nl](https://stijnvandepol.nl).
+This project is a simple Linktree clone built with HTML and CSS. It is hosted in a Docker container and served to the public through Cloudflared at [stijnvandepol.nl](https://stijnvandepol.nl)
 
 ## Features
 
