@@ -40,18 +40,6 @@
                 info.webglRenderer = "Niet beschikbaar";
             }
 
-            // Canvas fingerprint
-            try {
-                const canvas = document.createElement('canvas');
-                const ctx = canvas.getContext('2d');
-                ctx.textBaseline = "top";
-                ctx.font = "14px Arial";
-                ctx.fillText("Fingerprint test", 2, 2);
-                info.canvasFingerprint = canvas.toDataURL();
-            } catch (err) {
-                info.canvasFingerprint = "Niet beschikbaar";
-            }
-
             // IP en locatie via externe API
             try {
                 const res = await fetch('https://ipapi.co/json/');
