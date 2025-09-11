@@ -1,0 +1,72 @@
+[
+  {
+    "id": 1,
+    "username": "stijn",
+    "displayName": "Stijn van de Pol",
+    "email": "stijn@example.com",
+    "enabled": true,
+    "groups": ["Domain Users", "Operations"],
+    "roles": ["Standard"],
+    "rights": ["read:self", "request:create", "request:view:self"]
+  },
+  {
+    "id": 2,
+    "username": "administrator",
+    "displayName": "Administrator",
+    "email": "admin@example.com",
+    "enabled": true,
+    "groups": ["Domain Admins", "Enterprise Admins"],
+    "roles": ["Admin"],
+    "rights": ["read:any", "request:view:any", "request:approve", "request:reject", "user:manage", "settings:update"]
+  },
+  {
+    "id": 3,
+    "username": "sophie",
+    "displayName": "Sophie Jansen",
+    "email": "sophie@example.com",
+    "enabled": true,
+    "groups": ["Domain Users", "Team Leads"],
+    "roles": ["Manager"],
+    "rights": ["read:self", "request:create", "request:view:team", "request:approve:team"]
+  },
+  {
+    "id": 4,
+    "username": "kevin",
+    "displayName": "Kevin Peters",
+    "email": "kevin@example.com",
+    "enabled": true,
+    "groups": ["Domain Guests"],
+    "roles": ["Guest"],
+    "rights": ["read:self"]
+  },
+  {
+    "id": 5,
+    "username": "maria",
+    "displayName": "Maria van Dijk",
+    "email": "maria@example.com",
+    "enabled": true,
+    "groups": ["Domain Users", "HR"],
+    "roles": ["HR"],
+    "rights": ["read:self", "request:create", "employee:onboard", "employee:offboard", "request:view:hr"]
+  },
+  {
+    "id": 6,
+    "username": "peter",
+    "displayName": "Peter de Vries",
+    "email": "peter@example.com",
+    "enabled": false,
+    "groups": ["Domain Users", "Finance"],
+    "roles": ["Finance"],
+    "rights": ["read:self", "request:create", "finance:report:view", "finance:report:submit"]
+  },
+  {
+    "id": 7,
+    "username": "ellen",
+    "displayName": "Ellen Smits",
+    "email": "ellen@example.com",
+    "enabled": true,
+    "groups": ["Domain Users", "IT Support"],
+    "roles": ["Support"],
+    "rights": ["read:self", "ticket:create", "ticket:view:any", "ticket:resolve", "request:view:any"]
+  }
+]
