@@ -276,6 +276,37 @@
   <!-- custom js link -->
   <script src="./assets/js/script.js"></script>
 
+  <!-- navigatie hotfix: maak logica onafhankelijk van knoptekst -->
+  <script>
+  (function(){
+    const navLinks = document.querySelectorAll('.navbar [data-nav-link]');
+    const pages = document.querySelectorAll('article[data-page]');
+
+    function show(target){
+      if(!target) return;
+      pages.forEach(p => p.classList.toggle('active', p.dataset.page === target));
+      navLinks.forEach(b => b.classList.toggle('active', (b.dataset.target || '') === target));
+    }
+
+    // Overrule evt. oude handlers die op knoptekst vertrouwen
+    navLinks.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const fallback = (btn.textContent || '').toLowerCase().trim().replace(/\s+/g,'-');
+        const target = btn.dataset.target || fallback; // werkt ook voor later te activeren tabs
+        show(target);
+        e.preventDefault();
+        e.stopImmediatePropagation?.();
+        e.stopPropagation?.();
+        return false;
+      }, true); // capture = true: loopt vóór bestaande listeners
+    });
+
+    // Init: active knop bepaalt start; anders 'about'
+    const initial = document.querySelector('.navbar .navbar-link.active');
+    show(initial?.dataset.target || 'about');
+  })();
+  </script>
+
   <!-- ionicons -->
   <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
