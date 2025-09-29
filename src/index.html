@@ -129,15 +129,14 @@
       <nav class="navbar">
         <ul class="navbar-list">
           <li class="navbar-item">
-            <button class="navbar-link active" data-nav-link>About</button>
           </li>
 
           <li class="navbar-item">
-            <button class="navbar-link" data-nav-link>Resume</button>
+            <button class="navbar-link" data-nav-link>Carrièreoverzicht</button>
           </li>
 
           <!-- zichtbaar later maken door 'hidden' te verwijderen -->
-          <li class="navbar-item" hidden>
+          <li class="navbar-item">
             <button class="navbar-link" data-nav-link>Portfolio</button>
           </li>
 
@@ -152,7 +151,7 @@
       </nav>
 
       <!-- #ABOUT -->
-      <article class="about active" data-page="about">
+      <article class="about active" data-page="over mij">
 
         <header>
           <h2 class="h2 article-title">Over mij</h2>
@@ -287,10 +286,10 @@
       </article>
 
       <!-- #RESUME -->
-      <article class="resume" data-page="resume">
+      <article class="resume" data-page="carrièreoverzicht">
 
         <header>
-          <h2 class="h2 article-title">Curriculum Vitae</h2>
+          <h2 class="h2 article-title">Carrièreoverzicht</h2>
         </header>
 
         <section class="timeline">
@@ -419,15 +418,15 @@
             </li>
 
             <li class="filter-item">
-              <button data-filter-btn>Web design</button>
+              <button data-filter-btn>Infrastructuur</button>
             </li>
 
             <li class="filter-item">
-              <button data-filter-btn>Applications</button>
+              <button data-filter-btn>Applicaties</button>
             </li>
 
             <li class="filter-item">
-              <button data-filter-btn>Web development</button>
+              <button data-filter-btn>Cybersecurity</button>
             </li>
 
           </ul>
@@ -451,15 +450,15 @@
               </li>
 
               <li class="select-item">
-                <button data-select-item>Web design</button>
+                <button data-select-item>Infrastructuur</button>
               </li>
 
               <li class="select-item">
-                <button data-select-item>Applications</button>
+                <button data-select-item>Applicaties</button>
               </li>
 
               <li class="select-item">
-                <button data-select-item>Web development</button>
+                <button data-select-item>Cybersecurity</button>
               </li>
 
             </ul>
@@ -468,7 +467,7 @@
 
           <ul class="project-list">
 
-            <li class="project-item active" data-filter-item data-category="web development">
+            <li class="project-item active" data-filter-item data-category="infrastructuur">
               <a href="#">
                 <figure class="project-img">
                   <div class="project-item-icon-box">
@@ -476,13 +475,13 @@
                   </div>
                   <img src="./assets/images/project-1.jpg" alt="finance" loading="lazy">
                 </figure>
-                <h3 class="project-title">Finance</h3>
-                <p class="project-category">Web development</p>
+                <h3 class="project-title">OTAP Omgeving</h3>
+                <p class="project-category">GitHub Workflows · Cloudflared · Databases · Containerisatie</p>
               </a>
             </li>
 
             <!-- overige voorbeelditems uit het sjabloon intact gelaten -->
-            <li class="project-item active" data-filter-item data-category="web development">
+            <li class="project-item active" data-filter-item data-category="infrastructuur">
               <a href="#">
                 <figure class="project-img">
                   <div class="project-item-icon-box">
@@ -490,25 +489,25 @@
                   </div>
                   <img src="./assets/images/project-2.png" alt="orizon" loading="lazy">
                 </figure>
-                <h3 class="project-title">Orizon</h3>
-                <p class="project-category">Web development</p>
+                <h3 class="project-title">Hybride IT-Infrastructuur</h3>
+                <p class="project-category">Azure · Intune · On-Prem Services</p>
               </a>
             </li>
 
-            <li class="project-item active" data-filter-item data-category="web design">
+            <li class="project-item active" data-filter-item data-category="applicaties">
               <a href="#">
                 <figure class="project-img">
                   <div class="project-item-icon-box">
                     <ion-icon name="eye-outline"></ion-icon>
                   </div>
-                  <img src="./assets/images/project-3.jpg" alt="fundo" loading="lazy">
+                  <img src="./assets/images/project-3.png" alt="fundo" loading="lazy">
                 </figure>
-                <h3 class="project-title">Fundo</h3>
-                <p class="project-category">Web design</p>
+                <h3 class="project-title">Containerized Webapplicatie</h3>
+                <p class="project-category">Backend · Frontend · Database · Containerisatie</p>
               </a>
             </li>
 
-            <li class="project-item active" data-filter-item data-category="applications">
+            <li class="project-item active" data-filter-item data-category="applicaties">
               <a href="#">
                 <figure class="project-img">
                   <div class="project-item-icon-box">
@@ -516,12 +515,12 @@
                   </div>
                   <img src="./assets/images/project-4.png" alt="brawlhalla" loading="lazy">
                 </figure>
-                <h3 class="project-title">Brawlhalla</h3>
-                <p class="project-category">Applications</p>
+                <h3 class="project-title">Monitoring & Inzicht</h3>
+                <p class="project-category">Beszel · Checkmk · Dashboards · Alerts</p>
               </a>
             </li>
 
-            <li class="project-item active" data-filter-item data-category="web design">
+            <li class="project-item active" data-filter-item data-category="infrastructuur">
               <a href="#">
                 <figure class="project-img">
                   <div class="project-item-icon-box">
@@ -529,12 +528,12 @@
                   </div>
                   <img src="./assets/images/project-5.png" alt="dsm." loading="lazy">
                 </figure>
-                <h3 class="project-title">DSM.</h3>
-                <p class="project-category">Web design</p>
+                <h3 class="project-title">Virtualisatie & Containerisatie</h3>
+                <p class="project-category">Proxmox · VMs · LXC Containers · Clustering · Backups</p>
               </a>
             </li>
 
-            <li class="project-item active" data-filter-item data-category="web design">
+            <!-- <li class="project-item active" data-filter-item data-category="web design">
               <a href="#">
                 <figure class="project-img">
                   <div class="project-item-icon-box">
@@ -545,9 +544,9 @@
                 <h3 class="project-title">MetaSpark</h3>
                 <p class="project-category">Web design</p>
               </a>
-            </li>
+            </li> -->
 
-            <li class="project-item active" data-filter-item data-category="web development">
+            <!-- <li class="project-item active" data-filter-item data-category="cybersecurity">
               <a href="#">
                 <figure class="project-img">
                   <div class="project-item-icon-box">
@@ -558,9 +557,9 @@
                 <h3 class="project-title">Summary</h3>
                 <p class="project-category">Web development</p>
               </a>
-            </li>
+            </li> -->
 
-            <li class="project-item active" data-filter-item data-category="applications">
+            <!-- <li class="project-item active" data-filter-item data-category="applications">
               <a href="#">
                 <figure class="project-img">
                   <div class="project-item-icon-box">
@@ -571,9 +570,9 @@
                 <h3 class="project-title">Task Manager</h3>
                 <p class="project-category">Applications</p>
               </a>
-            </li>
+            </li> -->
 
-            <li class="project-item active" data-filter-item data-category="web development">
+            <!-- <li class="project-item active" data-filter-item data-category="web development">
               <a href="#">
                 <figure class="project-img">
                   <div class="project-item-icon-box">
@@ -584,7 +583,7 @@
                 <h3 class="project-title">Arrival</h3>
                 <p class="project-category">Web development</p>
               </a>
-            </li>
+            </li> -->
 
           </ul>
 
